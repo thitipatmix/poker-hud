@@ -13,7 +13,7 @@
         input[type="password"] { width: 80%; padding: 15px; font-size: 24px; text-align: center; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: white; margin-bottom: 20px; letter-spacing: 10px; }
         .btn-login { background: var(--primary); color: #0f172a; padding: 15px 40px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
         .stat-card { background: var(--card); padding: 15px; border-radius: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; font-size: 16px; appearance: none; text-align: center; }
+        select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; font-size: 15px; appearance: none; text-align: center; }
         label { font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px; font-weight: bold; text-align: center; }
         .btn-main { width: 100%; padding: 16px; background: var(--primary); color: #0f172a; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
         #result { display: none; margin-top: 10px; }
@@ -28,58 +28,84 @@
 <body>
     <div id="login-screen" class="app-container">
         <h2 style="color: var(--primary)">ONYX SECURE</h2>
-        <p style="font-size: 12px; color: #64748b">กรุณาใส่รหัสผ่าน</p>
+        <p style="font-size: 12px; color: #64748b">กรุณาใส่รหัสผ่านเพื่อใช้งาน</p>
         <input type="password" id="pass-input" maxlength="4" placeholder="****">
         <br>
-        <button class="btn-login" onclick="checkPass()">ENTER</button>
+        <button class="btn-login" onclick="checkPass()">ENTER HUD</button>
     </div>
 
     <div id="main-app" class="app-container">
         <div style="text-align: center; margin-bottom: 15px;">
-            <h2 style="margin:0; color:var(--primary); font-size: 20px;">ONYX HUD v6.1</h2>
+            <h2 style="margin:0; color:var(--primary); font-size: 20px;">ONYX SPEED-HUD v6.2</h2>
+            <small style="color: #64748b;">BlackRain79 Micro Stakes</small>
         </div>
         <div class="stat-card">
-            <div><label>VPIP</label><select id="v"><option value="12">Nit</option><option value="22">TAG</option><option value="30">LAG</option><option value="45">Fish</option><option value="60">Whale</option></select></div>
-            <div><label>PFR</label><select id="p"><option value="8">Passive</option><option value="15">Tight</option><option value="22">Aggro</option><option value="35">Maniac</option></select></div>
-            <div><label>ATS</label><select id="a"><option value="20">Low</option><option value="35">Normal</option><option value="55">High</option></select></div>
-            <div><label>3-BET</label><select id="b"><option value="3">Tight</option><option value="7">Normal</option><option value="12">Aggro</option></select></div>
+            <div><label>VPIP</label><select id="v">
+                <option value="12">Nit (< 15%)</option><option value="22">TAG (16-24%)</option>
+                <option value="30">LAG (25-35%)</option><option value="45">Fish (36-50%)</option>
+                <option value="60">Whale (50%+)</option>
+            </select></div>
+            <div><label>PFR</label><select id="p">
+                <option value="8">Passive (< 10%)</option><option value="15">Tight (11-17%)</option>
+                <option value="22">Aggro (18-25%)</option><option value="35">Maniac (26%+)</option>
+            </select></div>
+            <div><label>ATS</label><select id="a">
+                <option value="20">Low (< 25%)</option><option value="35">Normal (25-45%)</option>
+                <option value="55">High (45%+)</option>
+            </select></div>
+            <div><label>3-BET</label><select id="b">
+                <option value="3">Tight (< 5%)</option><option value="7">Normal (5-9%)</option>
+                <option value="12">Aggro (10%+)</option>
+            </select></div>
         </div>
-        <button class="btn-main" onclick="analyze()">วิเคราะห์</button>
+        <button class="btn-main" onclick="analyze()">วิเคราะห์ & สร้างโน้ต</button>
         <div id="result">
             <div id="res-head" class="res-header"></div>
             <div class="res-body">
                 <div class="info-box"><div class="info-title">🔴 จุดอ่อน</div><div id="weak-tip" class="info-desc"></div></div>
                 <div class="info-box"><div class="info-title">🔵 วิธีเอาชนะ</div><div id="exp-tip" class="info-desc"></div></div>
-                <button class="btn-copy" id="copy-btn" onclick="copyToClipboard()">📋 คัดลอกโน้ต</button>
+                <button class="btn-copy" id="copy-btn" onclick="copyToClipboard()">📋 คัดลอกโน้ตเข้า N8</button>
             </div>
         </div>
     </div>
+
     <script>
         const MY_PASS = "3030";
         function checkPass() {
             if(document.getElementById('pass-input').value === MY_PASS) {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-app').style.display = 'block';
-            } else { alert("รหัสผิด!"); }
+                document.body.style.alignItems = 'flex-start';
+            } else { alert("รหัสไม่ถูกต้อง!"); }
         }
         function analyze() {
             const v = parseInt(document.getElementById('v').value);
             const p = parseInt(document.getElementById('p').value);
             document.getElementById('result').style.display = 'block';
             let res = { type: "", color: "", weak: "", exp: "" };
-            if (v >= 36 && p < 18) { res = { type: "WHALE / FISH", color: "#22c55e", weak: "เล่นไพ่ขยะเยอะ ไม่ชอบหมอบ", exp: "Value Bet หนัก ห้ามบลัฟ" }; }
-            else if (v < 16) { res = { type: "NIT", color: "#ef4444", weak: "กลัวเสียชิป เล่นแต่ไพ่เทพ", exp: "ขโมย Blind และ C-Bet เล็ก" }; }
-            else if (p >= 26) { res = { type: "MANIAC", color: "#f59e0b", weak: "ดุดันเกิน บลัฟมั่ว", exp: "Check/Call เพื่อ Trap" }; }
-            else { res = { type: "REGULAR", color: "#38bdf8", weak: "เล่นตรงไปตรงมา", exp: "เลี่ยงปะทะหนัก หาจังหวะกินปลา" }; }
+            if (v >= 36 && p < 18) {
+                res = { type: "WHALE / FISH", color: "#22c55e", weak: "เล่นไพ่ขยะเยอะ ไม่ชอบหมอบ", exp: "เน้น Value Bet ใหญ่ ห้ามบลัฟ" };
+            } else if (v < 16) {
+                res = { type: "NIT", color: "#ef4444", weak: "กลัวเสียชิป เล่นแต่ไพ่เทพ", exp: "ขโมย Blind ยับๆ และ C-Bet เล็กขโมย Pot" };
+            } else if (p >= 26) {
+                res = { type: "MANIAC", color: "#f59e0b", weak: "ดุดันเกินเหตุ บลัฟมั่ว", exp: "Check/Call เพื่อ Trap ล่อให้เขาลองบลัฟ" };
+            } else {
+                res = { type: "REGULAR", color: "#38bdf8", weak: "เล่นตามระบบ ตรงไปตรงมา", exp: "เลี่ยงการปะทะหนัก หาจังหวะกินปลาแทน" };
+            }
             document.getElementById('res-head').innerText = res.type;
             document.getElementById('res-head').style.backgroundColor = res.color;
             document.getElementById('weak-tip').innerText = res.weak;
             document.getElementById('exp-tip').innerText = res.exp;
         }
         function copyToClipboard() {
-            const t = document.getElementById('res-head').innerText;
-            navigator.clipboard.writeText(`[${t}] กลยุทธ์: ${document.getElementById('exp-tip').innerText}`).then(() => {
-                document.getElementById('copy-btn').innerText = "✅ คัดลอกแล้ว!";
+            const type = document.getElementById('res-head').innerText;
+            const vText = document.getElementById('v').options[document.getElementById('v').selectedIndex].text;
+            const pText = document.getElementById('p').options[document.getElementById('p').selectedIndex].text;
+            const exp = document.getElementById('exp-tip').innerText;
+            navigator.clipboard.writeText(`[${type}] ${vText}/${pText} | วิธีชนะ: ${exp}`).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.innerText = "✅ คัดลอกแล้ว!";
+                setTimeout(() => { btn.innerText = "📋 คัดลอกโน้ตเข้า N8"; }, 2000);
             });
         }
     </script>
