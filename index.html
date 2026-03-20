@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ONYX PRIVATE HUD</title>
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --primary: #38bdf8; }
+        body { background-color: var(--bg); color: #f8fafc; font-family: sans-serif; margin: 0; padding: 10px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .app-container { max-width: 450px; width: 100%; margin: auto; }
+        #login-screen { text-align: center; background: var(--card); padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        #main-app { display: none; width: 100%; }
+        input[type="password"] { width: 80%; padding: 15px; font-size: 24px; text-align: center; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: white; margin-bottom: 20px; letter-spacing: 10px; }
+        .btn-login { background: var(--primary); color: #0f172a; padding: 15px 40px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .stat-card { background: var(--card); padding: 15px; border-radius: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; font-size: 16px; appearance: none; text-align: center; }
+        label { font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px; font-weight: bold; text-align: center; }
+        .btn-main { width: 100%; padding: 16px; background: var(--primary); color: #0f172a; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        #result { display: none; margin-top: 10px; }
+        .res-header { padding: 8px; border-radius: 8px 8px 0 0; font-weight: bold; text-align: center; color: #000; font-size: 14px; }
+        .res-body { background: var(--card); padding: 15px; border-radius: 0 0 8px 8px; border: 1px solid #334155; }
+        .info-box { margin-bottom: 12px; }
+        .info-title { font-size: 10px; color: var(--primary); font-weight: bold; margin-bottom: 2px; }
+        .info-desc { font-size: 13px; line-height: 1.4; color: #e2e8f0; }
+        .btn-copy { width: 100%; padding: 12px; background: #334155; color: #38bdf8; border: 1px solid #38bdf8; border-radius: 8px; font-weight: bold; margin-top: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div id="login-screen" class="app-container">
+        <h2 style="color: var(--primary)">ONYX SECURE</h2>
+        <p style="font-size: 12px; color: #64748b">กรุณาใส่รหัสผ่าน</p>
+        <input type="password" id="pass-input" maxlength="4" placeholder="****">
+        <br>
+        <button class="btn-login" onclick="checkPass()">ENTER</button>
+    </div>
+
+    <div id="main-app" class="app-container">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <h2 style="margin:0; color:var(--primary); font-size: 20px;">ONYX HUD v6.1</h2>
+        </div>
+        <div class="stat-card">
+            <div><label>VPIP</label><select id="v"><option value="12">Nit</option><option value="22">TAG</option><option value="30">LAG</option><option value="45">Fish</option><option value="60">Whale</option></select></div>
+            <div><label>PFR</label><select id="p"><option value="8">Passive</option><option value="15">Tight</option><option value="22">Aggro</option><option value="35">Maniac</option></select></div>
+            <div><label>ATS</label><select id="a"><option value="20">Low</option><option value="35">Normal</option><option value="55">High</option></select></div>
+            <div><label>3-BET</label><select id="b"><option value="3">Tight</option><option value="7">Normal</option><option value="12">Aggro</option></select></div>
+        </div>
+        <button class="btn-main" onclick="analyze()">วิเคราะห์</button>
+        <div id="result">
+            <div id="res-head" class="res-header"></div>
+            <div class="res-body">
+                <div class="info-box"><div class="info-title">🔴 จุดอ่อน</div><div id="weak-tip" class="info-desc"></div></div>
+                <div class="info-box"><div class="info-title">🔵 วิธีเอาชนะ</div><div id="exp-tip" class="info-desc"></div></div>
+                <button class="btn-copy" id="copy-btn" onclick="copyToClipboard()">📋 คัดลอกโน้ต</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const MY_PASS = "3030";
+        function checkPass() {
+            if(document.getElementById('pass-input').value === MY_PASS) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+            } else { alert("รหัสผิด!"); }
+        }
+        function analyze() {
+            const v = parseInt(document.getElementById('v').value);
+            const p = parseInt(document.getElementById('p').value);
+            document.getElementById('result').style.display = 'block';
+            let res = { type: "", color: "", weak: "", exp: "" };
+            if (v >= 36 && p < 18) { res = { type: "WHALE / FISH", color: "#22c55e", weak: "เล่นไพ่ขยะเยอะ ไม่ชอบหมอบ", exp: "Value Bet หนัก ห้ามบลัฟ" }; }
+            else if (v < 16) { res = { type: "NIT", color: "#ef4444", weak: "กลัวเสียชิป เล่นแต่ไพ่เทพ", exp: "ขโมย Blind และ C-Bet เล็ก" }; }
+            else if (p >= 26) { res = { type: "MANIAC", color: "#f59e0b", weak: "ดุดันเกิน บลัฟมั่ว", exp: "Check/Call เพื่อ Trap" }; }
+            else { res = { type: "REGULAR", color: "#38bdf8", weak: "เล่นตรงไปตรงมา", exp: "เลี่ยงปะทะหนัก หาจังหวะกินปลา" }; }
+            document.getElementById('res-head').innerText = res.type;
+            document.getElementById('res-head').style.backgroundColor = res.color;
+            document.getElementById('weak-tip').innerText = res.weak;
+            document.getElementById('exp-tip').innerText = res.exp;
+        }
+        function copyToClipboard() {
+            const t = document.getElementById('res-head').innerText;
+            navigator.clipboard.writeText(`[${t}] กลยุทธ์: ${document.getElementById('exp-tip').innerText}`).then(() => {
+                document.getElementById('copy-btn').innerText = "✅ คัดลอกแล้ว!";
+            });
+        }
+    </script>
+</body>
+</html>
