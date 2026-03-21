@@ -3,74 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ONYX ULTIMATE HUD v7.0</title>
+    <title>ONYX SMART HUD v7.1 (N8 Colors)</title>
     <style>
-        :root { --bg: #020617; --card: #1e293b; --primary: #38bdf8; --accent: #f472b6; }
-        body { background-color: var(--bg); color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 15px; display: flex; justify-content: center; min-height: 100vh; }
+        /* สีกำหนดใหม่ตาม GG Color Tags */
+        :root { 
+            --bg: #030712; --card: #1f2937; --primary: #38bdf8; 
+            --c-red: #ef4444;    /* ดุ/Maniac */
+            --c-blue: #3b82f6;   /* TAG/Regular */
+            --c-yellow: #f59e0b; /* Passive/Call Station */
+            --c-orange: #f97316; /* NIT/Tight */
+            --c-green: #22c55e;  /* Whale */
+            --c-pink: #ec4899;   /* Stealer */
+        }
+        body { background-color: var(--bg); color: #f9fafb; font-family: -apple-system, sans-serif; margin: 0; padding: 12px; display: flex; justify-content: center; min-height: 100vh; }
         .app-container { max-width: 450px; width: 100%; }
-        #login-screen { text-align: center; background: var(--card); padding: 40px 20px; border-radius: 24px; border: 1px solid #334155; margin-top: 50px; }
+        #login-screen { text-align: center; background: var(--card); padding: 40px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); margin-top: 60px; }
         #main-app { display: none; }
-        input[type="password"] { width: 70%; padding: 15px; font-size: 24px; text-align: center; border-radius: 12px; border: 1px solid var(--primary); background: #0f172a; color: white; margin-bottom: 20px; letter-spacing: 5px; }
-        .btn-login { background: var(--primary); color: #020617; padding: 15px 40px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-        .stat-item { background: var(--card); padding: 12px; border-radius: 16px; border: 1px solid #334155; }
-        label { font-size: 10px; color: var(--primary); font-weight: 800; display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
-        select { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 8px; font-size: 15px; font-weight: bold; }
-        .btn-analyze { width: 100%; padding: 18px; background: linear-gradient(135deg, #38bdf8, #818cf8); color: white; border: none; border-radius: 16px; font-weight: 800; font-size: 18px; cursor: pointer; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); }
-        #result { display: none; margin-top: 15px; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .res-card { border-radius: 16px; overflow: hidden; border: 1px solid #334155; }
-        .res-header { padding: 15px; font-weight: 900; text-align: center; color: white; font-size: 18px; letter-spacing: 1px; }
-        .res-body { background: #1e293b; padding: 20px; }
-        .box { margin-bottom: 15px; }
-        .box-title { font-size: 11px; font-weight: 900; margin-bottom: 5px; display: flex; align-items: center; }
-        .box-desc { font-size: 14px; line-height: 1.5; color: #cbd5e1; font-weight: 500; }
-        .btn-copy { width: 100%; padding: 14px; background: #334155; color: #38bdf8; border: 1px solid #38bdf8; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        input[type="password"] { width: 70%; padding: 12px; font-size: 20px; text-align: center; border-radius: 10px; border: 1px solid var(--primary); background: #111827; color: white; margin-bottom: 20px; }
+        .btn-login { background: var(--primary); color: #030712; padding: 12px 30px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .stat-card { background: var(--card); padding: 15px; border-radius: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        select { width: 100%; padding: 10px; background: #111827; border: 1px solid #4b5563; color: white; border-radius: 8px; font-size: 14px; text-align: center; }
+        label { font-size: 10px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 4px; text-transform: uppercase; text-align: center; }
+        .btn-main { width: 100%; padding: 16px; background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        #result { display: none; margin-top: 12px; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .res-container { border-radius: 12px; overflow: hidden; }
+        .res-header { padding: 12px; font-weight: 800; text-align: center; color: white; font-size: 16px; text-shadow: 1px 1px 2px rgba(0,0,0,0.7); }
+        .res-body { background: #1f2937; padding: 15px; border: 1px solid #374151; border-radius: 0 0 12px 12px; }
+        .info-box { margin-bottom: 12px; }
+        .info-desc { font-size: 13px; line-height: 1.5; color: #d1d5db; font-weight: 500; }
+        .info-desc span { display: block; margin-bottom: 4px; }
+        .btn-copy { width: 100%; padding: 12px; background: #374151; color: #38bdf8; border: 1px solid #38bdf8; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
     <div id="login-screen">
-        <h1 style="color: var(--primary); margin-top: 0;">ONYX ULTIMATE</h1>
-        <p style="color: #64748b; font-size: 14px;">ENTER ACCESS KEY</p>
+        <h2 style="color: var(--primary); margin-top: 0;">ONYX SMART HUD</h2>
         <input type="password" id="pass-input" maxlength="4" placeholder="••••">
-        <br><button class="btn-login" onclick="checkPass()">ACCESS SYSTEM</button>
+        <br><button class="btn-login" onclick="checkPass()">ACCESS</button>
     </div>
 
     <div id="main-app">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h2 style="margin:0; color:var(--primary); font-size: 24px;">PRO ANALYZER <span style="color:white">v7.0</span></h2>
-            <div style="width: 50px; height: 3px; background: var(--primary); margin: 8px auto;"></div>
+        <div style="text-align: center; margin-bottom: 15px;">
+            <h2 style="margin:0; color:var(--primary); font-size: 20px;">N8 Color & Note HUD v7.1</h2>
         </div>
-
-        <div class="stat-grid">
-            <div class="stat-item"><label>VPIP (ไพ่ที่เล่น)</label><select id="v">
+        <div class="stat-card">
+            <div><label>VPIP</label><select id="v">
                 <option value="12">Nit (< 15%)</option><option value="20">Tight (16-24%)</option>
-                <option value="30">Semi-Lag (25-35%)</option><option value="45">Fish (36-50%)</option>
+                <option value="30">LAG (25-35%)</option><option value="45">Fish (36-50%)</option>
                 <option value="65">Whale (50%+)</option>
             </select></div>
-            <div class="stat-item"><label>PFR (การ Raise)</label><select id="p">
+            <div><label>PFR</label><select id="p">
                 <option value="8">Passive (< 10%)</option><option value="15">Moderate (11-17%)</option>
                 <option value="22">Aggro (18-25%)</option><option value="35">Maniac (26%+)</option>
             </select></div>
-            <div class="stat-item"><label>ATS (ขโมยตาเปล่า)</label><select id="a">
+            <div><label>ATS</label><select id="a">
                 <option value="20">Low (< 25%)</option><option value="35">Normal (25-45%)</option>
                 <option value="55">Extreme (45%+)</option>
             </select></div>
-            <div class="stat-item"><label>3-BET (โต้กลับ)</label><select id="b">
+            <div><label>3-BET</label><select id="b">
                 <option value="3">Low (< 5%)</option><option value="7">Standard (5-9%)</option>
-                <option value="12">Aggressive (10%+)</option>
+                <option value="12">High (10%+)</option>
             </select></div>
         </div>
-
-        <button class="btn-analyze" onclick="analyze()">START DEEP ANALYSIS</button>
-
+        <button class="btn-main" onclick="analyze()">DEEP ANALYSIS</button>
         <div id="result">
-            <div class="res-card">
+            <div class="res-container">
                 <div id="res-head" class="res-header"></div>
                 <div class="res-body">
-                    <div class="box"><div class="box-title" style="color:#fb7185">🔴 ประเมินจุดอ่อน (WEAKNESS)</div><div id="weak-tip" class="box-desc"></div></div>
-                    <div class="box"><div class="box-title" style="color:#34d399">🔵 กลยุทธ์พิชิต (EXPLOIT)</div><div id="exp-tip" class="box-desc"></div></div>
-                    <button class="btn-copy" id="copy-btn" onclick="copyNote()">📋 COPY SMART NOTE</button>
+                    <div class="info-box"><div id="weak-tip" class="info-desc"></div></div>
+                    <div class="info-box"><div id="exp-tip" class="info-desc"></div></div>
+                    <button class="btn-copy" id="copy-btn" onclick="copyGGNote()">📋 คัดลอกโน้ตแบบเป็นระเบียบ</button>
                 </div>
             </div>
         </div>
@@ -85,6 +88,17 @@
             } else { alert("ACCESS DENIED"); }
         }
 
+        // ตัวช่วยสร้างข้อความสำหรับ HTML และ Clipboard แยกกัน
+        function generateTips(tips, icon) {
+            let html = `<strong>${icon}</strong><br>`;
+            let clipboard = '';
+            tips.forEach(tip => {
+                html += `<span>• ${tip}</span>`;
+                clipboard += ` • ${tip}\n`; // คัดลอกแบบมีจุดและขึ้นบรรทัดใหม่
+            });
+            return { html, clipboard };
+        }
+
         function analyze() {
             const v = parseInt(document.getElementById('v').value);
             const p = parseInt(document.getElementById('p').value);
@@ -92,39 +106,52 @@
             const b = parseInt(document.getElementById('b').value);
             const gap = v - p;
             
-            let res = { type: "", color: "", weak: "", exp: "" };
+            let res = { type: "", color: "", wTips: [], eTips: [] };
 
-            // ULTIMATE LOGIC v7.0
-            if (v >= 40 && gap >= 15) {
-                res = { type: "CALLING STATION (ปลาหวาน)", color: "#10b981", weak: "เล่นไพ่ขยะเยอะเกินไป และชอบ Call ลุ้นไปเรื่อยๆ โดยไม่มีหน้าไพ่", exp: "ห้ามบลัฟ 100%! ถ้าเรามีคู่สูงขึ้นไปให้ Bet ใหญ่ๆ รีดเงิน (Value Bet) เขาจะจ่ายเราเอง" };
-            } else if (v <= 18 && p <= 15) {
-                res = { type: "THE NIT (หินแกรนิต)", color: "#ef4444", weak: "เล่นเฉพาะไพ่พรีเมียม (AA, KK, AK) กลัวการแพ้มาก", exp: "ขโมย Blind ทุกครั้งที่มีโอกาส! ถ้าเขา Bet สวนมาให้หมอบทันที เพราะเขาจะมีไพ่เทพจริงๆ เท่านั้น" };
-            } else if (p >= 26 || b >= 12) {
-                res = { type: "AGGRESSIVE MANIAC", color: "#f59e0b", weak: "ดุเกินความจำเป็น บลัฟบ่อยเพื่อกดดันคนอื่น", exp: "ไม่ต้องไล่ตามเขา ให้ดักรอ (Trap) ด้วยไพ่กลางๆ แล้วปล่อยให้เขา Bet ยัดใส่เราเองจนหมดตัว" };
+            // LOGIC v7.1 (GG Color System)
+            if (p >= 26 || b >= 12) {
+                res = { type: "ดุจัด (MANIAC)", color: "var(--c-red)", wTips: ["ดุเกินเหตุ", "บลัฟมั่ว", "ATS สูงมาก"], eTips: ["ดักรอ (Trap)", "Check/Call บ่อย ๆ", "ห้ามบลัฟสวน"] };
             } else if (gap <= 6 && v <= 28) {
-                res = { type: "SOLID REGULAR (ขาประจำ)", color: "#6366f1", weak: "เล่นตามตำรา มักจะมีวินัยสูง", exp: "อย่าปะทะโดยตรงถ้าไม่มีไพ่ดีจริง พยายามหาทางกินปลาตัวอื่นในโต๊ะแทนที่จะสู้กับคนนี้" };
+                res = { type: "ขาประจำ (REGULAR)", color: "var(--c-blue)", wTips: ["เล่นตามระบบ", "รู้จังหวะ", "3-Bet แม่น"], eTips: ["หลีกเลี่ยง", "หาปลาที่โต๊ะอื่น", "ไม่ปะทะถ้าไพ่ไม่ดีจริง"] };
+            } else if (v >= 40 && gap >= 15) {
+                res = { type: "ช้างชอบคอล (STATION)", color: "var(--c-green)", wTips: ["ชอบ Limp-Call", "ไพ่ขยะเยอะ", "ไม่หมอบ"], eTips: ["เน้น Value Bet ใหญ่ ๆ", "ห้ามบลัฟเด็ดขาด", "ไม่ Raise ขู่"] };
+            } else if (v <= 18 && p <= 15) {
+                res = { type: "นิต (NIT)", color: "var(--c-orange)", wTips: ["เล่นแคบมาก", "กลัวเสียชิป", "AA/KK/AK เท่านั้น"], eTips: ["ขโมย Blind ยับ ๆ", "C-Bet เล็กขโมยกองกลาง", "หมอบทันทีถ้าเขา Raise"] };
             } else if (a >= 45 && v <= 30) {
-                res = { type: "SMART STEALER", color: "#f472b6", weak: "ชอบฉวยโอกาสขโมย Pot เมื่อเห็นคนอื่นอ่อนแอ", exp: "ลอง Check-Raise ใส่เขาดูบ้าง เขาจะหมอบทิ้งทันทีเพราะจริงๆ แล้วเขาไม่มีไพ่" };
+                res = { type: "ชอบฉวยโอกาส (STEALER)", color: "var(--c-pink)", wTips: ["ฉวยโอกาสสูง", "ชอบแอบขโมย"], eTips: ["Check-Raise สวนดูบ้าง", "หมอบถ้าเขา Call สวนมา"] };
             } else {
-                res = { type: "WEAK PASSIVE", color: "#94a3b8", weak: "ชอบ Limp เข้ามาดูฟล็อบ แต่ไม่กล้าตัดสินใจ", exp: "Raise ใส่แรงๆ ตั้งแต่พรีฟล็อบ เพื่อบีบให้เขาหมอบหรือจ่ายค่าดูแพงๆ" };
+                res = { type: "ปลาอ่อนแอ (PASSIVE FISH)", color: "var(--c-yellow)", wTips: ["เล่นตามอารมณ์", "ชอบดูฟล็อบฟรี"], eTips: ["Raise หนัก ๆ หน้าฟล็อบ", "กินค่า Limp บ่อย ๆ"] };
             }
 
             document.getElementById('result').style.display = 'block';
             document.getElementById('res-head').innerText = res.type;
             document.getElementById('res-head').style.backgroundColor = res.color;
-            document.getElementById('weak-tip').innerText = res.weak;
-            document.getElementById('exp-tip').innerText = res.exp;
+
+            // สร้าง HTML เพื่อแสดงผลหน้าเว็บ
+            const weakRes = generateTips(res.wTips, "🔴 สังเกต (Reads)");
+            const expRes = generateTips(res.eTips, "🔵 วิธีชนะ (Exploit)");
+            
+            document.getElementById('weak-tip').innerHTML = weakRes.html;
+            document.getElementById('exp-tip').innerHTML = expRes.html;
+            
+            // เก็บข้อความไว้คัดลอก (ใช้ \n เพื่อขึ้นบรรทัดใหม่)
+            document.getElementById('copy-btn').dataset.ggnote = 
+                `[${res.type}]\n🔴 สังเกต (Reads)\n${weakRes.clipboard}🔵 วิธีชนะ (Exploit)\n${expRes.clipboard}`;
         }
 
-        function copyNote() {
-            const type = document.getElementById('res-head').innerText;
-            const exp = document.getElementById('exp-tip').innerText;
-            navigator.clipboard.writeText(`[${type}] ${exp}`).then(() => {
+        function copyGGNote() {
+            const note = document.getElementById('copy-btn').dataset.ggnote;
+            navigator.clipboard.writeText(note).then(() => {
                 const btn = document.getElementById('copy-btn');
-                btn.innerText = "✅ COPIED TO CLIPBOARD";
-                setTimeout(() => btn.innerText = "📋 COPY SMART NOTE", 2000);
+                btn.innerText = "✅ คัดลอกสำเร็จ!";
+                btn.style.backgroundColor = "var(--c-green)"; btn.style.color = "white";
+                setTimeout(() => { 
+                    btn.innerText = "📋 คัดลอกโน้ตแบบเป็นระเบียบ"; 
+                    btn.style.backgroundColor = "#374151"; btn.style.color = "#38bdf8";
+                }, 1500);
             });
         }
     </script>
 </body>
-</html>
+                                                                                                  </html>
+                                            
