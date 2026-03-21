@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ONYX SMART HUD v10.0</title>
+    <title>ONYX SMART HUD v11.0 (Color Tag Edition)</title>
     <style>
         :root { 
             --bg: #030712; --card: #1f2937; --primary: #38bdf8; 
-            --c-nit: #f97316;     --c-tagfish: #94a3b8;   
-            --c-tag: #3b82f6;     --c-lag: #a855f7; 
-            --c-whale: #22c55e;   --c-maniac: #ef4444;   
+            /* GG Color Guide */
+            --tag-red: #ff3b30;    --tag-orange: #ff9500;
+            --tag-yellow: #ffcc00;  --tag-green: #34c759;
+            --tag-blue: #007aff;    --tag-purple: #af52de;
+            --tag-pink: #ff2d55;    --tag-cyan: #5ac8fa;
         }
         body { background-color: var(--bg); color: #f9fafb; font-family: -apple-system, sans-serif; margin: 0; padding: 12px; display: flex; justify-content: center; min-height: 100vh; }
         .app-container { max-width: 450px; width: 100%; }
-        #login-screen { text-align: center; background: var(--card); padding: 40px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); margin-top: 60px; width: 100%; max-width: 350px; }
+        #login-screen { text-align: center; background: var(--card); padding: 40px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); margin-top: 60px; width: 100%; max-width: 350px; align-self: flex-start; }
         #main-app { display: none; width: 100%; max-width: 450px; }
         input[type="password"] { width: 80%; padding: 12px; font-size: 20px; text-align: center; border-radius: 10px; border: 1px solid var(--primary); background: #111827; color: white; margin-bottom: 20px; outline: none; }
         .btn-login { background: var(--primary); color: #030712; padding: 12px 30px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
@@ -29,9 +31,11 @@
         
         #result { display: none; margin-top: 12px; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .res-container { border-radius: 12px; overflow: hidden; }
+        .res-container { border-radius: 12px; overflow: hidden; border: 1px solid #374151; }
         .res-header { padding: 12px; font-weight: 800; text-align: center; color: white; font-size: 16px; }
-        .res-body { background: #1f2937; padding: 15px; border: 1px solid #374151; border-radius: 0 0 12px 12px; }
+        .res-body { background: #1f2937; padding: 15px; }
+        .color-mark-box { display: flex; align-items: center; justify-content: center; gap: 10px; background: #111827; padding: 8px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #38bdf8; }
+        .color-dot { width: 20px; height: 20px; border-radius: 4px; border: 1px solid white; }
         .info-desc { font-size: 13px; line-height: 1.5; color: #d1d5db; margin-bottom: 10px; }
         .info-desc span { display: block; margin-bottom: 4px; }
         .btn-copy { width: 100%; padding: 12px; background: #374151; color: #38bdf8; border: 1px solid #38bdf8; border-radius: 8px; font-weight: bold; cursor: pointer; }
@@ -52,7 +56,7 @@
 
     <div id="main-app" class="app-container">
         <div style="text-align: center; margin-bottom: 15px;">
-            <h2 style="margin:0; color:var(--primary); font-size: 20px;">ONYX PRO & TRAINER v10.0</h2>
+            <h2 style="margin:0; color:var(--primary); font-size: 20px;">ONYX PRO HUD v11.0</h2>
         </div>
 
         <div class="tab-container">
@@ -86,6 +90,11 @@
                 <div class="res-container">
                     <div id="res-head" class="res-header"></div>
                     <div class="res-body">
+                        <div class="color-mark-box">
+                            <span style="font-size: 12px; color: #38bdf8; font-weight: bold;">GG TAG:</span>
+                            <div id="suggested-color-dot" class="color-dot"></div>
+                            <span id="suggested-color-name" style="font-size: 13px; font-weight: bold;"></span>
+                        </div>
                         <div id="weak-tip" class="info-desc"></div>
                         <div id="exp-tip" class="info-desc"></div>
                         <button class="btn-copy" id="copy-btn" onclick="copyGGNote()">📋 คัดลอกโน้ต</button>
@@ -120,8 +129,7 @@
         let currentDesc = "";
 
         function checkPass() {
-            const input = document.getElementById('pass-input').value;
-            if(input === MY_PASS) {
+            if(document.getElementById('pass-input').value === MY_PASS) {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-app').style.display = 'block';
                 generateQuiz();
@@ -137,12 +145,12 @@
 
         function getPlayerType(v, p, a, b) {
             const gap = v - p;
-            if (v >= 45 && p >= 30) return { id: 6, name: "6. RECREATIONAL - MANIAC", color: "var(--c-maniac)", w: ["บ้าดีเดือด", "เบทมั่วซั่ว"], e: ["Trap (วางกับดัก)", "ห้ามบลัฟสวน"], d: "VPIP/PFR สูงมากทั้งคู่" };
-            if (v >= 40 && gap >= 18) return { id: 5, name: "5. RECREATIONAL - WHALE", color: "var(--c-whale)", w: ["ปลาตัวใหญ่", "คอลทุกอย่าง"], e: ["Thin Value Bet", "ห้ามบลัฟเด็ดขาด"], d: "VPIP สูงแต่ PFR ต่ำมาก (Gap กว้าง)" };
-            if (v <= 17 && p <= 14) return { id: 1, name: "1. BAD REG - NIT", color: "var(--c-nit)", w: ["เล่นแคบมาก", "รอแต่ Nuts"], e: ["ขโมย Blind ยับๆ", "หมอบถ้าเขา Raise"], d: "สถิติต่ำทุกค่า เล่นเฉพาะไพ่ดีสุด" };
-            if (v >= 26 && p >= 21 && b >= 10) return { id: 4, name: "4. GOOD REG - LAG", color: "var(--c-lag)", w: ["ดุดันและเก่ง", "3-Bet บ่อย"], e: ["ระวังการถูกขโมย", "4-Bet บลัฟบ้าง"], d: "สถิติดุดัน ATS และ 3-Bet สูง" };
-            if (v >= 19 && v <= 26 && gap <= 6 && b >= 6) return { id: 3, name: "3. GOOD REG - TAG", color: "var(--c-tag)", w: ["มาตรฐานดี", "Balanced"], e: ["เลี่ยงการปะทะ", "กินกำไรจากปลาแทน"], d: "สถิติสมดุลตามมาตรฐาน Reg" };
-            return { id: 2, name: "2. BAD REG - TAGFISH", color: "var(--c-tagfish)", w: ["เล่นตรงตัว", "Passive ไปนิด"], e: ["Check-Raise บีบให้หมอบ", "โจมตีบอร์ด"], d: "สถิติดูกลางๆ แต่ไม่ดุดันพอ" };
+            if (v >= 45 && p >= 30) return { id: 6, name: "6. RECREATIONAL - MANIAC", color: "var(--tag-red)", colorName: "RED (ดุจัด)", w: ["บ้าดีเดือด", "เบทมั่วซั่ว"], e: ["Trap (วางกับดัก)", "ห้ามบลัฟสวน"], d: "Maniac: VPIP/PFR สูงมาก" };
+            if (v >= 40 && gap >= 18) return { id: 5, name: "5. RECREATIONAL - WHALE", color: "var(--tag-green)", colorName: "GREEN (ปลาคอล)", w: ["ปลาตัวใหญ่", "คอลทุกอย่าง"], e: ["Thin Value Bet", "ห้ามบลัฟเด็ดขาด"], d: "Whale: VPIP สูงแต่ PFR ต่ำ" };
+            if (v <= 17 && p <= 14) return { id: 1, name: "1. BAD REG - NIT", color: "var(--tag-orange)", colorName: "ORANGE (นิต)", w: ["เล่นแคบมาก", "รอแต่ Nuts"], e: ["ขโมย Blind ยับๆ", "หมอบถ้าเขา Raise"], d: "Nit: เล่นเฉพาะไพ่ดีสุด" };
+            if (v >= 26 && p >= 21 && b >= 10) return { id: 4, name: "4. GOOD REG - LAG", color: "var(--tag-purple)", colorName: "PURPLE (ดุเก่ง)", w: ["ดุดันและเก่ง", "3-Bet บ่อย"], e: ["ระวังถูกขโมย", "4-Bet บลัฟบ้าง"], d: "LAG: ดุดัน ATS/3-Bet สูง" };
+            if (v >= 19 && v <= 26 && gap <= 6 && b >= 6) return { id: 3, name: "3. GOOD REG - TAG", color: "var(--tag-blue)", colorName: "BLUE (Reg ดี)", w: ["มาตรฐานดี", "Balanced"], e: ["เลี่ยงการปะทะ", "กินกำไรจากปลา"], d: "TAG: สถิติสมดุลมาตรฐาน" };
+            return { id: 2, name: "2. BAD REG - TAGFISH", color: "var(--tag-cyan)", colorName: "CYAN (Reg อ่อน)", w: ["เล่นตรงตัว", "Passive ไปนิด"], e: ["Check-Raise บีบหมอบ", "โจมตีบอร์ด"], d: "TAGfish: สถิติดูกลางๆ" };
         }
 
         function analyze() {
@@ -155,9 +163,15 @@
             document.getElementById('result').style.display = 'block';
             document.getElementById('res-head').innerText = res.name;
             document.getElementById('res-head').style.backgroundColor = res.color;
+            
+            // แสดงข้อมูลสีแนะนำ
+            document.getElementById('suggested-color-dot').style.backgroundColor = res.color;
+            document.getElementById('suggested-color-name').innerText = res.colorName;
+            document.getElementById('suggested-color-name').style.color = res.color;
+
             document.getElementById('weak-tip').innerHTML = `<strong>🔴 สังเกต (Reads)</strong><br>` + res.w.map(t => `<span>• ${t}</span>`).join('');
             document.getElementById('exp-tip').innerHTML = `<strong>🔵 วิธีชนะ (Exploit)</strong><br>` + res.e.map(t => `<span>• ${t}</span>`).join('');
-            document.getElementById('copy-btn').dataset.ggnote = `[${res.name}]\nReads: ${res.w.join(', ')}\nExploit: ${res.e.join(', ')}`;
+            document.getElementById('copy-btn').dataset.ggnote = `[${res.name}]\nColor: ${res.colorName}\nExploit: ${res.e.join(', ')}`;
         }
 
         function generateQuiz() {
@@ -165,10 +179,10 @@
             let v, p, a, b;
             const typeSeed = Math.floor(Math.random() * 6) + 1;
             switch(typeSeed) {
-                case 1: v = Math.floor(Math.random() * 5) + 10; p = v - 2; a = 15; b = 3; break;
-                case 5: v = Math.floor(Math.random() * 15) + 45; p = 12; a = 10; b = 2; break;
-                case 6: v = Math.floor(Math.random() * 20) + 55; p = v - 10; a = 55; b = 18; break;
-                case 4: v = Math.floor(Math.random() * 5) + 28; p = v - 4; a = 48; b = 12; break;
+                case 1: v = 12; p = 10; a = 15; b = 3; break;
+                case 5: v = 50; p = 12; a = 10; b = 2; break;
+                case 6: v = 65; p = 50; a = 60; b = 20; break;
+                case 4: v = 28; p = 24; a = 48; b = 12; break;
                 case 3: v = 22; p = 19; a = 35; b = 8; break;
                 default: v = 24; p = 15; a = 25; b = 5;
             }
@@ -181,11 +195,12 @@
         function checkAnswer(choice) {
             const feedback = document.getElementById('feedback-box');
             document.getElementById('quiz-feedback').style.display = 'block';
+            const res = getPlayerType(0,0,0,0); // แค่ดึงสี
             if(choice === currentCorrectAnswer) {
-                feedback.style.backgroundColor = "var(--c-whale)";
+                feedback.style.backgroundColor = "var(--tag-green)";
                 feedback.innerHTML = `ถูกต้อง! ✅<br><span style="font-weight:normal; font-size:12px;">${currentDesc}</span>`;
             } else {
-                feedback.style.backgroundColor = "var(--c-maniac)";
+                feedback.style.backgroundColor = "var(--tag-red)";
                 feedback.innerHTML = `ผิด! คำตอบคือเบอร์ ${currentCorrectAnswer} ❌<br><span style="font-weight:normal; font-size:12px;">(${currentDesc})</span>`;
             }
         }
