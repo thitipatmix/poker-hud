@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ONYX SMART HUD v11.0 (Color Tag Edition)</title>
+    <title>ONYX SMART HUD v11.1 (Trainer Colors)</title>
     <style>
         :root { 
             --bg: #030712; --card: #1f2937; --primary: #38bdf8; 
@@ -11,7 +11,7 @@
             --tag-red: #ff3b30;    --tag-orange: #ff9500;
             --tag-yellow: #ffcc00;  --tag-green: #34c759;
             --tag-blue: #007aff;    --tag-purple: #af52de;
-            --tag-pink: #ff2d55;    --tag-cyan: #5ac8fa;
+            --tag-cyan: #5ac8fa;
         }
         body { background-color: var(--bg); color: #f9fafb; font-family: -apple-system, sans-serif; margin: 0; padding: 12px; display: flex; justify-content: center; min-height: 100vh; }
         .app-container { max-width: 450px; width: 100%; }
@@ -43,7 +43,8 @@
         .quiz-box { background: var(--card); padding: 20px; border-radius: 12px; border: 1px dashed var(--primary); text-align: center; }
         .quiz-stat-display { font-size: 26px; font-weight: bold; color: white; margin: 15px 0; letter-spacing: 1px; }
         .quiz-options { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 15px; }
-        .opt-btn { padding: 12px; background: #374151; border: 1px solid #4b5563; color: white; border-radius: 8px; cursor: pointer; font-size: 14px; text-align: left; }
+        .opt-btn { padding: 12px; background: #374151; border: 1px solid #4b5563; color: white; border-radius: 8px; cursor: pointer; font-size: 14px; text-align: left; transition: all 0.2s; }
+        .opt-btn:hover { border-color: var(--primary); }
     </style>
 </head>
 <body>
@@ -56,7 +57,7 @@
 
     <div id="main-app" class="app-container">
         <div style="text-align: center; margin-bottom: 15px;">
-            <h2 style="margin:0; color:var(--primary); font-size: 20px;">ONYX PRO HUD v11.0</h2>
+            <h2 style="margin:0; color:var(--primary); font-size: 20px;">ONYX PRO HUD v11.1</h2>
         </div>
 
         <div class="tab-container">
@@ -108,12 +109,12 @@
                 <div style="font-size: 12px; color: var(--primary);">วิเคราะห์ประเภทจากสถิติที่สุ่มได้</div>
                 <div id="quiz-stats" class="quiz-stat-display">-- / -- / -- / --</div>
                 <div class="quiz-options">
-                    <button class="opt-btn" onclick="checkAnswer(1)">1. Bad Reg - Nit</button>
-                    <button class="opt-btn" onclick="checkAnswer(2)">2. Bad Reg - TAGfish</button>
-                    <button class="opt-btn" onclick="checkAnswer(3)">3. Good Reg - TAG</button>
-                    <button class="opt-btn" onclick="checkAnswer(4)">4. Good Reg - LAG</button>
-                    <button class="opt-btn" onclick="checkAnswer(5)">5. Recreational - Whale</button>
-                    <button class="opt-btn" onclick="checkAnswer(6)">6. Recreational - Maniac</button>
+                    <button class="opt-btn" id="opt-1" onclick="checkAnswer(1)">1. Bad Reg - Nit</button>
+                    <button class="opt-btn" id="opt-2" onclick="checkAnswer(2)">2. Bad Reg - TAGfish</button>
+                    <button class="opt-btn" id="opt-3" onclick="checkAnswer(3)">3. Good Reg - TAG</button>
+                    <button class="opt-btn" id="opt-4" onclick="checkAnswer(4)">4. Good Reg - LAG</button>
+                    <button class="opt-btn" id="opt-5" onclick="checkAnswer(5)">5. Recreational - Whale</button>
+                    <button class="opt-btn" id="opt-6" onclick="checkAnswer(6)">6. Recreational - Maniac</button>
                 </div>
             </div>
             <div id="quiz-feedback" style="margin-top: 15px; display: none;">
@@ -127,6 +128,16 @@
         const MY_PASS = "3030";
         let currentCorrectAnswer = 0;
         let currentDesc = "";
+
+        // สีของแต่ละปุ่ม
+        const optionColors = {
+            1: "var(--tag-orange)", // Nit
+            2: "var(--tag-cyan)",   // TAGfish
+            3: "var(--tag-blue)",   // TAG
+            4: "var(--tag-purple)", // LAG
+            5: "var(--tag-green)",  // Whale
+            6: "var(--tag-red)"     // Maniac
+        };
 
         function checkPass() {
             if(document.getElementById('pass-input').value === MY_PASS) {
@@ -145,12 +156,12 @@
 
         function getPlayerType(v, p, a, b) {
             const gap = v - p;
-            if (v >= 45 && p >= 30) return { id: 6, name: "6. RECREATIONAL - MANIAC", color: "var(--tag-red)", colorName: "RED (ดุจัด)", w: ["บ้าดีเดือด", "เบทมั่วซั่ว"], e: ["Trap (วางกับดัก)", "ห้ามบลัฟสวน"], d: "Maniac: VPIP/PFR สูงมาก" };
-            if (v >= 40 && gap >= 18) return { id: 5, name: "5. RECREATIONAL - WHALE", color: "var(--tag-green)", colorName: "GREEN (ปลาคอล)", w: ["ปลาตัวใหญ่", "คอลทุกอย่าง"], e: ["Thin Value Bet", "ห้ามบลัฟเด็ดขาด"], d: "Whale: VPIP สูงแต่ PFR ต่ำ" };
-            if (v <= 17 && p <= 14) return { id: 1, name: "1. BAD REG - NIT", color: "var(--tag-orange)", colorName: "ORANGE (นิต)", w: ["เล่นแคบมาก", "รอแต่ Nuts"], e: ["ขโมย Blind ยับๆ", "หมอบถ้าเขา Raise"], d: "Nit: เล่นเฉพาะไพ่ดีสุด" };
-            if (v >= 26 && p >= 21 && b >= 10) return { id: 4, name: "4. GOOD REG - LAG", color: "var(--tag-purple)", colorName: "PURPLE (ดุเก่ง)", w: ["ดุดันและเก่ง", "3-Bet บ่อย"], e: ["ระวังถูกขโมย", "4-Bet บลัฟบ้าง"], d: "LAG: ดุดัน ATS/3-Bet สูง" };
-            if (v >= 19 && v <= 26 && gap <= 6 && b >= 6) return { id: 3, name: "3. GOOD REG - TAG", color: "var(--tag-blue)", colorName: "BLUE (Reg ดี)", w: ["มาตรฐานดี", "Balanced"], e: ["เลี่ยงการปะทะ", "กินกำไรจากปลา"], d: "TAG: สถิติสมดุลมาตรฐาน" };
-            return { id: 2, name: "2. BAD REG - TAGFISH", color: "var(--tag-cyan)", colorName: "CYAN (Reg อ่อน)", w: ["เล่นตรงตัว", "Passive ไปนิด"], e: ["Check-Raise บีบหมอบ", "โจมตีบอร์ด"], d: "TAGfish: สถิติดูกลางๆ" };
+            if (v >= 45 && p >= 30) return { id: 6, name: "6. RECREATIONAL - MANIAC", color: optionColors[6], colorName: "RED (ดุจัด)", w: ["บ้าดีเดือด", "เบทมั่วซั่ว"], e: ["Trap (วางกับดัก)", "ห้ามบลัฟสวน"], d: "Maniac: VPIP/PFR สูงมาก" };
+            if (v >= 40 && gap >= 18) return { id: 5, name: "5. RECREATIONAL - WHALE", color: optionColors[5], colorName: "GREEN (ปลาคอล)", w: ["ปลาตัวใหญ่", "คอลทุกอย่าง"], e: ["Thin Value Bet", "ห้ามบลัฟเด็ดขาด"], d: "Whale: VPIP สูงแต่ PFR ต่ำ" };
+            if (v <= 17 && p <= 14) return { id: 1, name: "1. BAD REG - NIT", color: optionColors[1], colorName: "ORANGE (นิต)", w: ["เล่นแคบมาก", "รอแต่ Nuts"], e: ["ขโมย Blind ยับๆ", "หมอบถ้าเขา Raise"], d: "Nit: เล่นเฉพาะไพ่ดีสุด" };
+            if (v >= 26 && p >= 21 && b >= 10) return { id: 4, name: "4. GOOD REG - LAG", color: optionColors[4], colorName: "PURPLE (ดุเก่ง)", w: ["ดุดันและเก่ง", "3-Bet บ่อย"], e: ["ระวังถูกขโมย", "4-Bet บลัฟบ้าง"], d: "LAG: ดุดัน ATS/3-Bet สูง" };
+            if (v >= 19 && v <= 26 && gap <= 6 && b >= 6) return { id: 3, name: "3. GOOD REG - TAG", color: optionColors[3], colorName: "BLUE (Reg ดี)", w: ["มาตรฐานดี", "Balanced"], e: ["เลี่ยงการปะทะ", "กินกำไรจากปลา"], d: "TAG: สถิติสมดุลมาตรฐาน" };
+            return { id: 2, name: "2. BAD REG - TAGFISH", color: optionColors[2], colorName: "CYAN (Reg อ่อน)", w: ["เล่นตรงตัว", "Passive ไปนิด"], e: ["Check-Raise บีบหมอบ", "โจมตีบอร์ด"], d: "TAGfish: สถิติดูกลางๆ" };
         }
 
         function analyze() {
@@ -164,7 +175,6 @@
             document.getElementById('res-head').innerText = res.name;
             document.getElementById('res-head').style.backgroundColor = res.color;
             
-            // แสดงข้อมูลสีแนะนำ
             document.getElementById('suggested-color-dot').style.backgroundColor = res.color;
             document.getElementById('suggested-color-name').innerText = res.colorName;
             document.getElementById('suggested-color-name').style.color = res.color;
@@ -176,15 +186,23 @@
 
         function generateQuiz() {
             document.getElementById('quiz-feedback').style.display = 'none';
+            
+            // ล้างสีปุ่มเก่า
+            for(let i=1; i<=6; i++){
+                const btn = document.getElementById(`opt-${i}`);
+                btn.style.backgroundColor = "#374151";
+                btn.style.borderColor = "#4b5563";
+            }
+
             let v, p, a, b;
             const typeSeed = Math.floor(Math.random() * 6) + 1;
             switch(typeSeed) {
-                case 1: v = 12; p = 10; a = 15; b = 3; break;
-                case 5: v = 50; p = 12; a = 10; b = 2; break;
-                case 6: v = 65; p = 50; a = 60; b = 20; break;
-                case 4: v = 28; p = 24; a = 48; b = 12; break;
-                case 3: v = 22; p = 19; a = 35; b = 8; break;
-                default: v = 24; p = 15; a = 25; b = 5;
+                case 1: v = 12; p = 10; a = 15; b = 3; break; // Nit
+                case 5: v = 50; p = 12; a = 10; b = 2; break; // Whale
+                case 6: v = 65; p = 50; a = 60; b = 20; break; // Maniac
+                case 4: v = 28; p = 24; a = 48; b = 12; break; // LAG
+                case 3: v = 22; p = 19; a = 35; b = 8; break; // TAG
+                default: v = 24; p = 15; a = 25; b = 5; // TAGfish
             }
             const res = getPlayerType(v, p, a, b);
             currentCorrectAnswer = res.id;
@@ -195,13 +213,22 @@
         function checkAnswer(choice) {
             const feedback = document.getElementById('feedback-box');
             document.getElementById('quiz-feedback').style.display = 'block';
-            const res = getPlayerType(0,0,0,0); // แค่ดึงสี
+            
+            // ไฮไลท์สีของคำตอบที่ถูกต้องเสมอ
+            const correctBtn = document.getElementById(`opt-${currentCorrectAnswer}`);
+            correctBtn.style.backgroundColor = optionColors[currentCorrectAnswer];
+            correctBtn.style.borderColor = "white";
+
             if(choice === currentCorrectAnswer) {
                 feedback.style.backgroundColor = "var(--tag-green)";
                 feedback.innerHTML = `ถูกต้อง! ✅<br><span style="font-weight:normal; font-size:12px;">${currentDesc}</span>`;
             } else {
                 feedback.style.backgroundColor = "var(--tag-red)";
                 feedback.innerHTML = `ผิด! คำตอบคือเบอร์ ${currentCorrectAnswer} ❌<br><span style="font-weight:normal; font-size:12px;">(${currentDesc})</span>`;
+                // ไฮไลท์สีตัวที่เลือกผิดเป็นสีแดง GG
+                const wrongBtn = document.getElementById(`opt-${choice}`);
+                wrongBtn.style.backgroundColor = "var(--tag-red)";
+                wrongBtn.style.borderColor = "white";
             }
         }
 
