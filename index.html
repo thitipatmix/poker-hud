@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ONYX SMART HUD v8.0 (Trainer Edition)</title>
+    <title>ONYX SMART HUD v9.0 (Pro Analyzer)</title>
     <style>
         :root { 
             --bg: #030712; --card: #1f2937; --primary: #38bdf8; 
-            --c-red: #ef4444;    --c-blue: #3b82f6;   
-            --c-yellow: #f59e0b; --c-orange: #f97316; 
-            --c-green: #22c55e;  --c-pink: #ec4899;   
+            --c-nit: #f97316;     --c-tagfish: #94a3b8;   
+            --c-tag: #3b82f6;     --c-lag: #a855f7; 
+            --c-whale: #22c55e;   --c-maniac: #ef4444;   
         }
         body { background-color: var(--bg); color: #f9fafb; font-family: -apple-system, sans-serif; margin: 0; padding: 12px; display: flex; justify-content: center; min-height: 100vh; }
         .app-container { max-width: 450px; width: 100%; }
@@ -18,32 +18,28 @@
         input[type="password"] { width: 70%; padding: 12px; font-size: 20px; text-align: center; border-radius: 10px; border: 1px solid var(--primary); background: #111827; color: white; margin-bottom: 20px; }
         .btn-login { background: var(--primary); color: #030712; padding: 12px 30px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
         
-        /* Tab Styles */
         .tab-container { display: flex; gap: 5px; margin-bottom: 15px; background: #111827; padding: 5px; border-radius: 12px; }
         .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; background: transparent; color: #9ca3af; font-weight: bold; cursor: pointer; font-size: 13px; }
         .tab-btn.active { background: var(--primary); color: #030712; }
 
         .stat-card { background: var(--card); padding: 15px; border-radius: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; border: 1px solid #374151; }
-        select, .quiz-input { width: 100%; padding: 10px; background: #111827; border: 1px solid #4b5563; color: white; border-radius: 8px; font-size: 14px; text-align: center; box-sizing: border-box; }
+        select { width: 100%; padding: 10px; background: #111827; border: 1px solid #4b5563; color: white; border-radius: 8px; font-size: 14px; text-align: center; }
         label { font-size: 10px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 4px; text-transform: uppercase; text-align: center; }
         .btn-main { width: 100%; padding: 16px; background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s; }
-        .btn-main:active { transform: scale(0.98); }
         
-        #result, #quiz-result { display: none; margin-top: 12px; animation: fadeIn 0.3s; }
+        #result { display: none; margin-top: 12px; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .res-container { border-radius: 12px; overflow: hidden; }
         .res-header { padding: 12px; font-weight: 800; text-align: center; color: white; font-size: 16px; text-shadow: 1px 1px 2px rgba(0,0,0,0.7); }
         .res-body { background: #1f2937; padding: 15px; border: 1px solid #374151; border-radius: 0 0 12px 12px; }
         .info-desc { font-size: 13px; line-height: 1.5; color: #d1d5db; font-weight: 500; margin-bottom: 10px; }
-        .info-desc span { display: block; margin-bottom: 4px; }
         .btn-copy { width: 100%; padding: 12px; background: #374151; color: #38bdf8; border: 1px solid #38bdf8; border-radius: 8px; font-weight: bold; cursor: pointer; }
         
-        /* Trainer Specific */
+        /* Trainer Section */
         .quiz-box { background: var(--card); padding: 20px; border-radius: 12px; border: 1px dashed var(--primary); text-align: center; }
-        .quiz-stat-display { font-size: 24px; font-weight: bold; color: white; margin: 15px 0; letter-spacing: 1px; }
+        .quiz-stat-display { font-size: 24px; font-weight: bold; color: white; margin: 10px 0; }
         .quiz-options { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 15px; }
-        .opt-btn { padding: 12px; background: #374151; border: 1px solid #4b5563; color: white; border-radius: 8px; cursor: pointer; font-size: 14px; text-align: left; }
-        .opt-btn:hover { border-color: var(--primary); }
+        .opt-btn { padding: 12px; background: #374151; border: 1px solid #4b5563; color: white; border-radius: 8px; cursor: pointer; font-size: 13px; text-align: left; }
     </style>
 </head>
 <body>
@@ -55,7 +51,7 @@
 
     <div id="main-app">
         <div style="text-align: center; margin-bottom: 15px;">
-            <h2 style="margin:0; color:var(--primary); font-size: 20px;">ONYX HUD & TRAINER v8.0</h2>
+            <h2 style="margin:0; color:var(--primary); font-size: 20px;">ONYX PRO HUD v9.0</h2>
         </div>
 
         <div class="tab-container">
@@ -66,24 +62,24 @@
         <div id="section-analyzer">
             <div class="stat-card">
                 <div><label>VPIP</label><select id="v">
-                    <option value="12">Nit (< 15%)</option><option value="20">Tight (16-24%)</option>
-                    <option value="30">LAG (25-35%)</option><option value="45">Fish (36-50%)</option>
+                    <option value="12">Nit (< 15%)</option><option value="22" selected>Tight (16-25%)</option>
+                    <option value="32">LAG (26-35%)</option><option value="45">Fish (36-50%)</option>
                     <option value="65">Whale (50%+)</option>
                 </select></div>
                 <div><label>PFR</label><select id="p">
-                    <option value="8">Passive (< 10%)</option><option value="15">Moderate (11-17%)</option>
-                    <option value="22">Aggro (18-25%)</option><option value="35">Maniac (26%+)</option>
+                    <option value="8">Passive (< 10%)</option><option value="18" selected>Moderate (11-20%)</option>
+                    <option value="26">Aggro (21-30%)</option><option value="40">Maniac (31%+)</option>
                 </select></div>
-                <div><label>ATS</label><select id="a">
-                    <option value="20">Low (< 25%)</option><option value="35">Normal (25-45%)</option>
+                <div><label>ATS (Steal)</label><select id="a">
+                    <option value="20">Low (< 25%)</option><option value="35" selected>Normal (25-45%)</option>
                     <option value="55">Extreme (45%+)</option>
                 </select></div>
                 <div><label>3-BET</label><select id="b">
-                    <option value="3">Low (< 5%)</option><option value="7">Standard (5-9%)</option>
-                    <option value="12">High (10%+)</option>
+                    <option value="4">Low (< 5%)</option><option value="8" selected>Standard (5-10%)</option>
+                    <option value="13">High (10%+)</option>
                 </select></div>
             </div>
-            <button class="btn-main" onclick="analyze()">DEEP ANALYSIS</button>
+            <button class="btn-main" onclick="analyze()">ANALYZE 6-MAX TYPE</button>
             
             <div id="result">
                 <div class="res-container">
@@ -91,7 +87,7 @@
                     <div class="res-body">
                         <div id="weak-tip" class="info-desc"></div>
                         <div id="exp-tip" class="info-desc"></div>
-                        <button class="btn-copy" id="copy-btn" onclick="copyGGNote()">📋 คัดลอกโน้ตแบบเป็นระเบียบ</button>
+                        <button class="btn-copy" id="copy-btn" onclick="copyGGNote()">📋 คัดลอกโน้ตจัดเต็ม</button>
                     </div>
                 </div>
             </div>
@@ -101,8 +97,6 @@
             <div class="quiz-box">
                 <div style="font-size: 12px; color: var(--primary);">จำแนกประเภทจากสถิติ (6-Max)</div>
                 <div id="quiz-stats" class="quiz-stat-display">25 / 20 / 35 / 8</div>
-                <div style="font-size: 10px; color: #9ca3af;">(VPIP / PFR / ATS / 3BET)</div>
-                
                 <div class="quiz-options">
                     <button class="opt-btn" onclick="checkAnswer(1)">1. Bad Reg - Nit</button>
                     <button class="opt-btn" onclick="checkAnswer(2)">2. Bad Reg - TAGfish</button>
@@ -127,7 +121,7 @@
             if(document.getElementById('pass-input').value === MY_PASS) {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-app').style.display = 'block';
-                generateQuiz(); // เตรียมโจทย์ไว้รอ
+                generateQuiz();
             } else { alert("ACCESS DENIED"); }
         }
 
@@ -138,7 +132,7 @@
             document.getElementById('btn-tra').className = tab === 'trainer' ? 'tab-btn active' : 'tab-btn';
         }
 
-        // Logic เดิมของคุณ Onyx303
+        // --- NEW PRECISE LOGIC v9.0 ---
         function analyze() {
             const v = parseInt(document.getElementById('v').value);
             const p = parseInt(document.getElementById('p').value);
@@ -146,38 +140,38 @@
             const b = parseInt(document.getElementById('b').value);
             const gap = v - p;
             
-            let res = { type: "", color: "", wTips: [], eTips: [] };
+            let res = { type: "", color: "", w: [], e: [] };
 
-            if (p >= 26 || b >= 12) {
-                res = { type: "ดุจัด (MANIAC)", color: "var(--c-red)", wTips: ["ดุเกินเหตุ", "บลัฟมั่ว", "ATS สูงมาก"], eTips: ["ดักรอ (Trap)", "Check/Call บ่อย ๆ", "ห้ามบลัฟสวน"] };
-            } else if (gap <= 6 && v <= 28) {
-                res = { type: "ขาประจำ (REGULAR)", color: "var(--c-blue)", wTips: ["เล่นตามระบบ", "รู้จังหวะ", "3-Bet แม่น"], eTips: ["หลีกเลี่ยง", "หาปลาที่โต๊ะอื่น", "ไม่ปะทะถ้าไพ่ไม่ดีจริง"] };
-            } else if (v >= 40 && gap >= 15) {
-                res = { type: "ช้างชอบคอล (STATION)", color: "var(--c-green)", wTips: ["ชอบ Limp-Call", "ไพ่ขยะเยอะ", "ไม่หมอบ"], eTips: ["เน้น Value Bet ใหญ่ ๆ", "ห้ามบลัฟเด็ดขาด", "ไม่ Raise ขู่"] };
-            } else if (v <= 18 && p <= 15) {
-                res = { type: "นิต (NIT)", color: "var(--c-orange)", wTips: ["เล่นแคบมาก", "กลัวเสียชิป", "AA/KK/AK เท่านั้น"], eTips: ["ขโมย Blind ยับ ๆ", "C-Bet เล็กขโมยกองกลาง", "หมอบทันทีถ้าเขา Raise"] };
-            } else if (a >= 45 && v <= 30) {
-                res = { type: "ชอบฉวยโอกาส (STEALER)", color: "var(--c-pink)", wTips: ["ฉวยโอกาสสูง", "ชอบแอบขโมย"], eTips: ["Check-Raise สวนดูบ้าง", "หมอบถ้าเขา Call สวนมา"] };
+            if (v >= 45 && p >= 31) {
+                res = { type: "6. RECREATIONAL - MANIAC", color: "var(--c-maniac)", w: ["บ้าดีเดือด", "เบทมั่วซั่ว", "ATS สูงเกินจริง"], e: ["Trap (วางกับดัก)", "Check-Call เพื่อให้เขาบลัฟใส่", "ห้ามบลัฟสวน"] };
+            } else if (v >= 40 && gap >= 20) {
+                res = { type: "5. RECREATIONAL - WHALE", color: "var(--c-whale)", w: ["ปลาตัวใหญ่", "คอลทุกอย่าง", "Limp บ่อย"], e: ["Thin Value Bet", "ห้ามบลัฟเด็ดขาด", "เบทให้หนักเมื่อติดไพ่"] };
+            } else if (v <= 17 && p <= 14) {
+                res = { type: "1. BAD REG - NIT", color: "var(--c-nit)", w: ["เล่นแคบมาก", "กลัวความเสี่ยง", "รอแต่ Nuts"], e: ["ขโมย Blind ยับๆ", "C-Bet เล็กขโมยกองกลาง", "หมอบทันทีถ้าเขา Raise"] };
+            } else if (v >= 26 && p >= 21 && b >= 10) {
+                res = { type: "4. GOOD REG - LAG", color: "var(--c-lag)", w: ["ดุดันและเก่ง", "กดดันเราบ่อย", "ATS สูง"], e: ["หาจังหวะ 4-Bet บลัฟ", "ไม่ปะทะถ้าไพ่ไม่ดีจริง", "มองหาจุดรั่วในบอร์ด"] };
+            } else if (v >= 19 && v <= 26 && gap <= 5 && b >= 7) {
+                res = { type: "3. GOOD REG - TAG", color: "var(--c-tag)", w: ["ผู้เล่นมาตรฐานดี", "สมดุล (Balanced)", "ระวังตัวสูง"], e: ["เลี่ยงการปะทะ", "กินกำไรจากปลาตัวอื่นแทน", "ระวังเมื่อเขา 3-Bet"] };
             } else {
-                res = { type: "ปลาอ่อนแอ (PASSIVE FISH)", color: "var(--c-yellow)", wTips: ["เล่นตามอารมณ์", "ชอบดูฟล็อบฟรี"], eTips: ["Raise หนัก ๆ หน้าฟล็อบ", "กินค่า Limp บ่อย ๆ"] };
+                res = { type: "2. BAD REG - TAGFISH", color: "var(--c-tagfish)", w: ["เหมือนจะเก่งแต่ตรงตัว", "ไม่กล้าตัดสินใจยากๆ", "เล่นตามตำราเป๊ะ"], e: ["Check-Raise บีบให้หมอบ", "โจมตีบอร์ดที่เขาไม่น่ามีไพ่", "ใช้ขนาดเบทกดดัน"] };
             }
 
             document.getElementById('result').style.display = 'block';
             document.getElementById('res-head').innerText = res.type;
             document.getElementById('res-head').style.backgroundColor = res.color;
-            document.getElementById('weak-tip').innerHTML = `<strong>🔴 สังเกต (Reads)</strong><br>` + res.wTips.map(t => `<span>• ${t}</span>`).join('');
-            document.getElementById('exp-tip').innerHTML = `<strong>🔵 วิธีชนะ (Exploit)</strong><br>` + res.eTips.map(t => `<span>• ${t}</span>`).join('');
-            document.getElementById('copy-btn').dataset.ggnote = `[${res.type}]\nReads: ${res.wTips.join(', ')}\nExploit: ${res.eTips.join(', ')}`;
+            document.getElementById('weak-tip').innerHTML = `<strong>🔴 สังเกต (Reads)</strong><br>` + res.w.map(t => `<span>• ${t}</span>`).join('');
+            document.getElementById('exp-tip').innerHTML = `<strong>🔵 วิธีชนะ (Exploit)</strong><br>` + res.e.map(t => `<span>• ${t}</span>`).join('');
+            document.getElementById('copy-btn').dataset.ggnote = `[${res.type}]\nReads: ${res.w.join(', ')}\nExploit: ${res.e.join(', ')}`;
         }
 
-        // --- Trainer Logic ---
+        // --- TRAINER DATA ---
         const quizData = [
-            { s: "12 / 10 / 18 / 4", a: 1, desc: "Nit: สถิติต่ำทุกค่า เล่นแต่ไพ่พรีเมียม" },
-            { s: "22 / 14 / 28 / 6", a: 2, desc: "TAGfish: สถิติดูดีแต่ Passive เกินไป" },
-            { s: "24 / 20 / 38 / 9", a: 3, desc: "TAG: ผู้เล่นปกติที่ค่อนข้างดี ดุดันแบบมีแผน" },
-            { s: "30 / 26 / 48 / 12", a: 4, desc: "LAG: ดุมาก ขโมย Blind บ่อย 3-Bet เยอะ" },
-            { s: "55 / 10 / 15 / 2", a: 5, desc: "Whale: VPIP สูงมากแต่ PFR ต่ำ คือปลาชอบคอล" },
-            { s: "60 / 45 / 55 / 18", a: 6, desc: "Maniac: บ้าคลั่ง ดุเกินไปทุกช่องทาง" }
+            { s: "14 / 11 / 18 / 4", a: 1, desc: "Nit: เล่นแคบและ Passive เกินไป" },
+            { s: "22 / 12 / 24 / 5", a: 2, desc: "TAGfish: สถิติดูเหมือนจะดี แต่ Passive ไม่ดุดันจริง" },
+            { s: "23 / 19 / 38 / 8", a: 3, desc: "TAG: สถิติสมดุล ดุดันกำลังดีตามมาตรฐาน" },
+            { s: "29 / 24 / 48 / 12", a: 4, desc: "LAG: ดุมาก ขโมย Blind เก่ง 3-Bet เยอะ" },
+            { s: "55 / 15 / 12 / 3", a: 5, desc: "Whale: ปลาชอบคอล VPIP สูงลิ่วแต่ไม่ Raise" },
+            { s: "65 / 48 / 60 / 22", a: 6, desc: "Maniac: บ้าคลั่ง เบทและ Raise ทุกอย่าง" }
         ];
 
         function generateQuiz() {
@@ -191,15 +185,10 @@
             const feedback = document.getElementById('feedback-box');
             document.getElementById('quiz-feedback').style.display = 'block';
             const correctObj = quizData.find(d => d.a === currentCorrectAnswer);
-
             if(choice === currentCorrectAnswer) {
-                feedback.style.backgroundColor = "var(--c-green)";
-                feedback.style.color = "white";
-                feedback.innerText = "ถูกต้อง! " + correctObj.desc;
+                feedback.style.backgroundColor = "var(--c-whale)"; feedback.innerText = "ถูกต้อง! " + correctObj.desc;
             } else {
-                feedback.style.backgroundColor = "var(--c-red)";
-                feedback.style.color = "white";
-                feedback.innerText = "ผิด! คำตอบที่ถูกคือเบอร์ " + currentCorrectAnswer + "\n(" + correctObj.desc + ")";
+                feedback.style.backgroundColor = "var(--c-maniac)"; feedback.innerText = "ผิด! คำตอบคือเบอร์ " + currentCorrectAnswer + "\n(" + correctObj.desc + ")";
             }
         }
 
@@ -207,8 +196,8 @@
             const note = document.getElementById('copy-btn').dataset.ggnote;
             navigator.clipboard.writeText(note).then(() => {
                 const btn = document.getElementById('copy-btn');
-                btn.innerText = "✅ คัดลอกสำเร็จ!";
-                setTimeout(() => { btn.innerText = "📋 คัดลอกโน้ตแบบเป็นระเบียบ"; }, 1500);
+                btn.innerText = "✅ สำเร็จ!";
+                setTimeout(() => { btn.innerText = "📋 คัดลอกโน้ตจัดเต็ม"; }, 1500);
             });
         }
     </script>
